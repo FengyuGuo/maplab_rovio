@@ -179,14 +179,20 @@ class Patch {
   void drawPatchBorder(cv::Mat& drawImg,const FeatureCoordinates& c,const float s, const cv::Scalar& color) const{
     const double half_length = s*patchSize/2;
     if(c.isInFront() && c.com_warp_c()){
+      cv::Point2f center = c.get_patchCorner(0, 0).get_c();
       cv::Point2f c1 = c.get_patchCorner(half_length,half_length).get_c();
       cv::Point2f c2 = c.get_patchCorner(half_length,-half_length).get_c();
+      if(c1.dot(c1) == 0) c1 = center;
+      if(c2.dot(c2) == 0) c2 = center;
       cv::line(drawImg,c1,c2,color,1);
       c1 = c.get_patchCorner(-half_length,-half_length).get_c();
+      if(c1.dot(c1) == 0) c1 = center;
       cv::line(drawImg,c2,c1,color,1);
       c2 = c.get_patchCorner(-half_length,half_length).get_c();
+      if(c2.dot(c2) == 0) c2 = center;
       cv::line(drawImg,c1,c2,color,1);
       c1 = c.get_patchCorner(half_length,half_length).get_c();
+      if(c1.dot(c1) == 0) c1 = center;
       cv::line(drawImg,c2,c1,color,1);
     }
   }
