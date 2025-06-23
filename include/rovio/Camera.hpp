@@ -47,7 +47,7 @@ class Camera{
   DistortionModel type_;
 
   //@{
-  /** \brief Distortion Parameter. */
+  /** \brief Distortion Parameter. s4_ used to store xi of omni dir camera*/
   double k1_,k2_,k3_,k4_,k5_,k6_;
   double p1_,p2_,s1_,s2_,s3_,s4_;
   //@}
@@ -130,6 +130,12 @@ class Camera{
    *   @param out - Distorted point coordinates on the unit plane (in camera coordinates).
    */
   void distort(const Eigen::Vector2d& in, Eigen::Vector2d& out) const;
+
+  void distortOmni(const Eigen::Vector2d& in, Eigen::Vector2d& out) const;
+  void distortOmni(const Eigen::Vector2d& in, Eigen::Vector2d& out, Eigen::Matrix2d& J) const;
+
+  void omni_distortion(double mx_u, double my_u, double *dx_u, double *dy_u) const;
+  void space2plane(double x, double y, double z, double *u, double *v) const;
 
   /** \brief Distorts a point on the unit plane, according to the set distortion model (#ModelType) and to the set
    *         distortion coefficients. Outputs additionally the corresponding jacobian matrix (input to output).

@@ -50,11 +50,31 @@ void CameraCalibration::loadFromFile(const std::string& calibration_yaml_file) {
     loadRadTanDistortion(calibration_yaml_file);
   } else if (distortionModelName == "equidistant") {
     loadEquidistDistortion(calibration_yaml_file);
-  } else {
+  } else if (distortionModelName == "omni")
+  {
+    loadOmniDistortion(calibration_yaml_file);
+  }
+  else {
     std::cout << "ERROR: no camera Model detected!" << std::endl;
     return;
   }
   hasIntrinsics_ = true;
+}
+
+void CameraCalibration::loadOmniDistortion(
+  const std::string &calibration_yaml_file) {
+
+  CHECK(!calibration_yaml_file.empty());
+  YAML::Node config = YAML::LoadFile(calibration_yaml_file);
+
+  distortionModel_ = DistortionModel::OMNIDIR;
+  distortionParams_.resize(getNumDistortionParam());
+
+  distortionParams_[0] = config[DIST_COEFFS][DATA][0].as<double>();
+  distortionParams_[1] = config[DIST_COEFFS][DATA][1].as<double>();
+  distortionParams_[2] = config[DIST_COEFFS][DATA][2].as<double>();
+  distortionParams_[3] = config[DIST_COEFFS][DATA][3].as<double>();
+  distortionParams_[4] = config[DIST_COEFFS][DATA][4].as<double>();
 }
 
 void CameraCalibration::loadRadTanDistortion(
