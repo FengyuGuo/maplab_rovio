@@ -243,6 +243,7 @@ bool RovioInterfaceImpl<FILTER>::processImuUpdate(
       mpFilter_->addPredictionMeas(predictionMeas_, time_s);
 
   if (update_filter) {
+    VLOG(5) << "imu update filter";
     updateFilter();
   }
   return measurement_accepted;
@@ -281,6 +282,7 @@ bool RovioInterfaceImpl<FILTER>::processImageUpdate(const int camID,
     measurement_accepted =
         mpFilter_->template addUpdateMeas<0>(imgUpdateMeas_, msgTime);
       imgUpdateMeas_.template get<mtImgMeas::_aux>().reset(msgTime);
+    VLOG(5) << "image update filter";
     updateFilter();
   }
   return measurement_accepted;
@@ -619,7 +621,7 @@ template <typename FILTER> bool RovioInterfaceImpl<FILTER>::updateFilter() {
   if (mpFilter_->safe_.t_ <= oldSafeTime) {
     return false;
   }
-
+  VLOG(3) << "===================update time: " << timing_T / timing_C << " ms";
   visualizeUpdate();
 
   // Notify all filter state update callbacks.

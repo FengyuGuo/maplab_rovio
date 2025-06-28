@@ -275,7 +275,7 @@ class FeatureTrackerNode{
 
     cv::imshow("Tracker", draw_image_);
     cv::imshow("Patches", draw_patches_);
-    cv::waitKey(30);
+    cv::waitKey(1);
     last_time = current_time;
   }
 };
